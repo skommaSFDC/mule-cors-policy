@@ -31,11 +31,11 @@ __In http listener config, configuration of CORS interceptor looks like this wit
 
 *Used POSTMAN to test it and invoked OPTIONS method with the above three headers*
 
-### Successful Test. Expected domain is found by Mule CORS interceptor. Returns *access-control-allow-origin* header
+### Successful Test. Returns *access-control-allow-origin* header
 
 ![image](https://user-images.githubusercontent.com/16226297/116602579-eb200780-a8f9-11eb-98ac-eb0b037e1d02.png)
 
 
-### Failed test. Domain sent not accepted. Does not return *access-control-allow-origin* header
+### Failed test. Does not return *access-control-allow-origin* header
 
 ![image](https://user-images.githubusercontent.com/16226297/116602650-00953180-a8fa-11eb-8e73-e72de581c1c4.png)
