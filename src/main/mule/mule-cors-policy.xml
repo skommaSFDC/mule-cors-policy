@@ -1,24 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1c35e688-578a-49da-8271-ce96aa7aeb71" >
-		<http:listener-connection host="0.0.0.0" port="8081" />
-		<http:listener-interceptors >
-			<http:cors-interceptor >
-				<http:origins >
-					<http:origin url="https://www.test-cors-1.org" accessControlMaxAge="30" />
-<!-- 					For Successful test, uncomment the line below -->
-<!-- 					<http:origin url="https://www.test-cors.org" accessControlMaxAge="30" /> -->
+	<http:listener-config name="HTTP_Listener_config"
+		doc:name="HTTP Listener config"
+		doc:id="1c35e688-578a-49da-8271-ce96aa7aeb71">
+		<http:listener-connection host="0.0.0.0"
+			port="8081" />
+		<http:listener-interceptors>
+			<http:cors-interceptor>
+				<http:origins>
+					<!-- Preflight call with HTTP method OPTIONS sends three headers: - 
+						Access-Control-Request-Method - Origin - Access-Control-Request-Headers -->
+					<http:origin url="https://www.test-cors.org"
+						accessControlMaxAge="30">
+						<http:allowed-methods>
+							<http:method methodName="POST" />
+						</http:allowed-methods>
+						<http:allowed-headers>
+							<!-- If prefight call has any custom request headers in Access-Control-Request-Headers 
+								header which is/are other than below, CORS will not accept -->
+							<http:header headerName="authorization" />
+							<http:header headerName="corr-id" />
+						</http:allowed-headers>
+					</http:origin>
 				</http:origins>
 			</http:cors-interceptor>
 		</http:listener-interceptors>
 	</http:listener-config>
-	<flow name="mule-cors-policyFlow" doc:id="d2029933-640c-47ee-aa77-d4609a9fd3b6" >
-		<http:listener doc:name="Listener" doc:id="fc74939a-b5ba-4c85-95fe-1dc3ddfd9318" config-ref="HTTP_Listener_config" path="/cors"/>
-		<set-payload value="Hello..You passed thru CORS policy" doc:name="Set Payload" doc:id="1e6d876e-407b-4fdf-953a-31df7fff3745" />
-		<logger level="INFO" doc:name="Logger" doc:id="e3ce3b09-c707-44b4-bb27-17b42466c9ad" message="#[payload]"/>
+	<flow name="mule-cors-policyFlow"
+		doc:id="d2029933-640c-47ee-aa77-d4609a9fd3b6">
+		<http:listener doc:name="Listener"
+			doc:id="fc74939a-b5ba-4c85-95fe-1dc3ddfd9318"
+			config-ref="HTTP_Listener_config" path="/cors" />
+		<set-payload value="Hello..You passed thru CORS policy"
+			doc:name="Set Payload" doc:id="1e6d876e-407b-4fdf-953a-31df7fff3745" />
+		<logger level="INFO" doc:name="Logger"
+			doc:id="e3ce3b09-c707-44b4-bb27-17b42466c9ad" message="#[payload]" />
 	</flow>
 </mule>
